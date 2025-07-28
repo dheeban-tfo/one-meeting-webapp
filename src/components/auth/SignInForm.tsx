@@ -1,15 +1,15 @@
 /**
- * Sign-In Form Component - shadcn/ui Version
+ * Sign-In Form Component - Minimalist Design
  * 
- * This component provides the sign-in interface with Microsoft Azure AD using shadcn/ui.
- * It handles the authentication flow and loading states.
+ * This component provides a clean, minimalist sign-in interface matching
+ * the design specification with centered layout and simple styling.
  * 
  * Features:
- * - Microsoft Azure AD sign-in button with shadcn/ui Button
- * - Loading states with proper feedback
- * - Error handling and user feedback
- * - Responsive design with shadcn/ui Card
- * - Accessibility features
+ * - Clean, left-aligned layout
+ * - Minimalist design with simple typography
+ * - Microsoft Azure AD integration
+ * - Loading states and error handling
+ * - Responsive design
  */
 
 'use client'
@@ -17,16 +17,13 @@
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-
 interface SignInFormProps {
   callbackUrl?: string
 }
 
 /**
  * SignInForm Component
- * Renders the sign-in form with Microsoft Azure AD integration using shadcn/ui
+ * Renders the minimalist sign-in interface
  */
 export default function SignInForm({ callbackUrl }: SignInFormProps) {
   const [isLoading, setIsLoading] = useState(false)
@@ -42,7 +39,6 @@ export default function SignInForm({ callbackUrl }: SignInFormProps) {
       setError(null)
       
       // Initiate sign-in with Microsoft provider
-      // For NextAuth.js v5, use redirectTo instead of callbackUrl
       await signIn('microsoft-entra-id', {
         redirectTo: callbackUrl || '/',
       })
@@ -54,56 +50,45 @@ export default function SignInForm({ callbackUrl }: SignInFormProps) {
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Welcome to OneMeeting</CardTitle>
-        <CardDescription>
-          Sign in with your Microsoft work or school account
-        </CardDescription>
-      </CardHeader>
-      
-      <CardContent className="space-y-4">
-        {/* Error Display */}
-        {error && (
-          <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-950">
-            <div className="text-sm text-red-800 dark:text-red-200">
-              {error}
-            </div>
+    <div className="w-full">
+      {/* Error Display */}
+      {error && (
+        <div className="mb-6 p-4 rounded-lg bg-red-50 border border-red-200">
+          <div className="text-sm text-red-800">
+            {error}
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Microsoft Sign-In Button */}
-        <Button
+      {/* Sign In Content */}
+      <div className="space-y-6">
+        {/* Heading */}
+        <div className="space-y-3">
+          <h2 className="text-2xl font-normal text-black">
+            Sign in
+          </h2>
+          <p className="text-sm text-black leading-relaxed">
+            Sign in using your company&apos;s email credentials<br />
+            for enhanced security.
+          </p>
+        </div>
+
+        {/* Sign In Button */}
+        <button
           onClick={handleSignIn}
           disabled={isLoading}
-          className="w-full"
-          size="lg"
+          className="inline-block bg-amber-600 hover:bg-amber-700 text-white text-sm font-normal py-2 px-4 rounded border border-amber-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {/* Loading Spinner */}
           {isLoading ? (
-            <>
-              <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
+            <span className="flex items-center">
+              <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent mr-2" />
               Signing in...
-            </>
+            </span>
           ) : (
-            <>
-              {/* Microsoft Icon */}
-              <svg className="w-5 h-5 mr-2" viewBox="0 0 23 23" fill="currentColor">
-                <path d="M0 0h11v11H0V0z" fill="#f25022"/>
-                <path d="M12 0h11v11H12V0z" fill="#00a4ef"/>
-                <path d="M0 12h11v11H0V12z" fill="#ffb900"/>
-                <path d="M12 12h11v11H12V12z" fill="#7fba00"/>
-              </svg>
-              Sign in with Microsoft
-            </>
+            'Sign in'
           )}
-        </Button>
-
-        {/* Additional Information */}
-        <p className="text-center text-sm text-muted-foreground">
-          By signing in, you agree to our terms of service and privacy policy.
-        </p>
-      </CardContent>
-    </Card>
+        </button>
+      </div>
+    </div>
   )
 } 
